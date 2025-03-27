@@ -1,0 +1,58 @@
+class HeapMin():
+    heap = []
+
+    def siftUp(self):
+        i = len(self.heap) - 1
+        while i > 0 and self.heap[i] < self.heap[(i-1)//2]:
+            self.heap[(i-1)//2], self.heap[i] = self.heap[i], self.heap[(i-1)//2]
+            i = (i-1)//2
+        return
+
+    def siftDown(self):
+        i = 0
+        while 2 * i + 1 < len(self.heap):
+            left = 2 * i + 1
+            right = 2 * i + 2
+            min_son = left
+            if right < len(self.heap) and self.heap[right] < self.heap[left]:
+                min_son = right
+            if self.heap[i] <= self.heap[min_son]:
+                break
+            self.heap[i], self.heap[min_son] = self.heap[min_son], self.heap[i]
+            i = min_son
+
+    def insert(self, el):
+        self.heap.append(el)
+        self.siftUp()
+
+    def popMin(self):
+        top = self.heap[0]
+        self.heap[0] = self.heap[-1]
+        self.heap.pop(-1)
+        self.siftDown()
+        return top
+    
+    def size(self):
+        return len(self.heap)
+    
+    def sum(self):
+        return sum(self.heap)
+
+n = int(input())
+heap = HeapMin()
+for i in range(n):
+    a = int(input())
+    heap.insert(a)
+
+summ = 0
+heap = HeapMin()
+
+if heap.size() == 1:
+    print(heap.heap[0])
+else:
+    while heap.size() > 2:
+            min1 = heap.popMin()
+            min2 = heap.popMin()
+            summ+=min1 + min2
+            heap.insert(min1 + min2)
+    print(summ + heap.heap[0] + heap.heap[1])
